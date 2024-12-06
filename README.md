@@ -69,4 +69,30 @@
 ---
 
 ## Authentication
-To use most API endpoints, a valid JWT must be included in the `Authorization` header:
+
+Authentication is a cornerstone of the Library Management API, ensuring that only authorized users can interact with the system. The API employs **JSON Web Tokens (JWT)** to handle authentication securely and efficiently. JWT is an industry-standard method for securely transmitting information between parties, and it is well-suited for stateless RESTful APIs.
+
+### How Authentication Works
+
+1. **User Login**:
+   - The user submits their credentials (username and password) to the `/auth/login` endpoint via a `POST` request.
+   - The API validates the provided credentials against the database.
+   - If the credentials are valid, a JWT is generated and returned to the client.
+
+2. **Token-Based Access**:
+   - For every subsequent request, the client must include the JWT in the `Authorization` header in the following format:
+     ```
+     Authorization: Bearer <token>
+     ```
+   - The API validates the token to ensure it is authentic and has not expired before granting access to the requested resource.
+
+3. **Token Expiration**:
+   - JWTs have a limited lifespan, typically 1 hour by default. This ensures that tokens cannot be reused indefinitely in case they are compromised.
+   - After expiration, the user must reauthenticate by calling the `/auth/login` endpoint to obtain a new token.
+
+4. **Statelessness**:
+   - The API does not maintain session data on the server side. All user information is encoded in the token, making the system scalable and easier to manage.
+
+---
+
+
